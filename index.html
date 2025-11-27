@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxe Number Grid ✨</title>
+    <title>Luxe Black Friday Grid 🖤</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-glow: #00f2fe;
             --secondary-glow: #4facfe;
-            --accent-pink: #ff9a9e;
-            --accent-purple: #a18cd1;
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --accent-pink: #ff00cc;
+            --accent-purple: #3300ff;
+            --glass-bg: rgba(20, 20, 20, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text-color: #fff;
+            --bg-dark: #050505;
+            --bg-light: #1a1a1a;
         }
 
         body {
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background: linear-gradient(45deg, #a18cd1 0%, #fbc2eb 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            color: var(--text-color);
             font-family: 'Quicksand', sans-serif;
             display: flex;
             flex-direction: column;
@@ -33,59 +34,63 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         h1 {
             color: white;
             font-size: 2.5rem;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
             margin-bottom: 2rem;
             margin-top: 2rem;
             font-weight: 700;
             letter-spacing: 2px;
             animation: float 3s ease-in-out infinite;
+            text-transform: uppercase;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0); text-shadow: 0 0 20px rgba(0, 242, 254, 0.5); }
+            50% { transform: translateY(-5px); text-shadow: 0 0 35px rgba(0, 242, 254, 0.8); }
         }
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-            gap: 15px;
-            width: 90%;
-            max-width: 1000px;
+            /* Forced 10 columns as requested */
+            grid-template-columns: repeat(10, 1fr);
+            gap: 12px;
+            width: 95%;
+            max-width: 1200px;
             padding: 20px;
             perspective: 1000px;
             margin-bottom: 40px;
         }
 
+        /* Responsive adjustments for smaller screens to keep 10 columns legible or allow scroll */
+        @media (max-width: 800px) {
+            .grid-container {
+                gap: 6px;
+                padding: 10px;
+            }
+        }
+
         .number-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 12px;
             aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: white;
+            color: rgba(255, 255, 255, 0.9);
             cursor: pointer;
             position: relative;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05), inset 0 0 10px rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.5);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
         }
 
-        /* Glossy Shine Effect */
+        /* Glossy Shine Effect - Updated for dark mode */
         .number-card::after {
             content: '';
             position: absolute;
@@ -93,28 +98,31 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(to bottom right, rgba(255,255,255,0.3) 0%, transparent 40%, transparent 100%);
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.1) 0%, transparent 40%, transparent 100%);
             transform: rotate(30deg);
             pointer-events: none;
         }
 
         .number-card:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.4);
-            border-color: #fff;
-            z-index: 10;
+            transform: translateY(-5px) scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 25px var(--primary-glow), 0 0 10px rgba(255,255,255,0.5);
+            border-color: var(--primary-glow);
+            z-index: 100;
+            color: #fff;
         }
 
         .number-card:active {
             transform: scale(0.95);
         }
 
-        /* Selected State */
+        /* Selected State - High Contrast Neon */
         .number-card.selected {
-            background: linear-gradient(135deg, var(--secondary-glow) 0%, var(--primary-glow) 100%);
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 0 20px var(--primary-glow), inset 0 0 15px rgba(255,255,255,0.5);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            background: #000; /* Deep black center to make border pop */
+            border: 2px solid var(--primary-glow);
+            box-shadow: 0 0 30px var(--primary-glow), inset 0 0 15px var(--primary-glow);
+            color: var(--primary-glow);
+            text-shadow: 0 0 10px var(--primary-glow);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -128,18 +136,18 @@
         .pop-text {
             position: fixed;
             pointer-events: none;
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            color: var(--primary-glow);
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
             z-index: 1000;
             animation: floatUp 0.8s ease-out forwards;
         }
 
         @keyframes floatUp {
             0% { opacity: 0; transform: translateY(0) scale(0.5); }
-            20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
-            100% { opacity: 0; transform: translateY(-60px) scale(1); }
+            20% { opacity: 1; transform: translateY(-30px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1); }
         }
 
         /* Start Overlay */
@@ -149,8 +157,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -159,22 +167,26 @@
         }
 
         .start-btn {
-            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-            border: none;
+            background: linear-gradient(90deg, #000 0%, #333 100%);
+            border: 2px solid var(--primary-glow);
             padding: 1.5rem 3rem;
             border-radius: 50px;
             font-family: 'Quicksand', sans-serif;
             font-size: 1.5rem;
-            color: white;
+            color: var(--primary-glow);
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+            transition: all 0.3s;
         }
 
         .start-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 15px 35px rgba(255, 154, 158, 0.4);
+            background: var(--primary-glow);
+            color: #000;
+            box-shadow: 0 0 50px var(--primary-glow);
         }
 
     </style>
@@ -183,10 +195,10 @@
 
     <!-- Audio Consent Overlay -->
     <div id="overlay">
-        <button class="start-btn" id="startBtn">✨ Start the Magic ✨</button>
+        <button class="start-btn" id="startBtn">🔥 Enter Black Friday 🔥</button>
     </div>
 
-    <h1>✨ 1 - 80 Luxe Grid ✨</h1>
+    <h1>✨ Black Friday Grid ✨</h1>
     
     <div class="grid-container" id="grid"></div>
 
@@ -198,9 +210,9 @@
         let audioCtx;
         
         const funnyPhrases = [
-            "Yaaas!", "Slay!", "Gorg!", "Chic!", "Boop!", 
-            "Spicy!", "Ooh la la!", "Divine!", "Iconic!", 
-            "Serving!", "Luxe!", "Glow up!", "Sheesh!", "Pop!"
+            "Sold!", "Steal!", "Luxe!", "Mine!", "Bag it!", 
+            "Spicy!", "Rich!", "Divine!", "Iconic!", 
+            "Serving!", "Black!", "Glow!", "Sheesh!", "Pop!"
         ];
 
         // --- Audio Context Setup (Web Audio API) ---
@@ -311,9 +323,6 @@
                         // Use clientX/Y from event or get bounding rect center if needed
                         // Using event coordinates is more playful
                         createPopText(e.clientX, e.clientY);
-                        
-                        // Add particle burst logic here if we wanted to get crazy, 
-                        // but the CSS glow is pretty luxe already.
                     }
                 });
 
