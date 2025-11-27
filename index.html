@@ -29,7 +29,7 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background: var(--bg-dark);
+            background: url('img/kittyBF.jpg') center center / cover no-repeat fixed;
             color: var(--text-color);
             font-family: 'Quicksand', sans-serif;
             display: flex;
@@ -42,7 +42,7 @@
             position: relative;
         }
 
-        /* Gorgeous animated background */
+        /* Dark overlay to keep text readable */
         body::before {
             content: '';
             position: fixed;
@@ -54,7 +54,7 @@
                 radial-gradient(ellipse at 20% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 80%, rgba(183, 110, 121, 0.08) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 50%, rgba(139, 0, 255, 0.05) 0%, transparent 70%),
-                linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
+                rgba(0, 0, 0, 0.75);
             z-index: -2;
             animation: bgShift 15s ease-in-out infinite;
         }
@@ -461,21 +461,50 @@
     
     <div class="grid-container" id="grid"></div>
 
+    <div class="footer-vibes">
+        Made with <span>💖</span> for the Black Friday Queens
+    </div>
+
     <script>
         // --- Setup ---
         const grid = document.getElementById('grid');
         const overlay = document.getElementById('overlay');
         const startBtn = document.getElementById('startBtn');
+        const sparkleContainer = document.getElementById('sparkles');
         let audioCtx;
         
+        // Custom sound for number clicks
+        const clickSound = new Audio('sound/googAndres.mp3');
+        
+        // Yassified funny phrases 💅
         const funnyPhrases = [
-            "Sold!", "Steal!", "Luxe!", "Mine!", "Bag it!", 
-            "Spicy!", "Rich!", "Divine!", "Iconic!", 
-            "Serving!", "Black!", "Glow!", "Sheesh!", "Pop!"
+            "SLAY!", "Iconic!", "Period!", "Ate that!", "Mother!", 
+            "Serving!", "No cap!", "Luxe!", "It's giving!", "Yasss!", 
+            "Rich!", "Divine!", "Sheesh!", "Main character!", "Purr!",
+            "Obsessed!", "Sliving!", "Gorge!", "Bingo!", "Queen!",
+            "Crown it!", "Stunning!", "Extra!", "Glow up!", "Fierce!",
+            "Chef's kiss!", "Vibes!", "Legend!", "Secure!", "Bag it!"
         ];
 
+        // --- Create floating sparkles ---
+        function createSparkles() {
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 8 + 's';
+                sparkle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                
+                // Random sparkle colors
+                const colors = ['#ffd700', '#b76e79', '#b9f2ff', '#ff6b6b', '#fff'];
+                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.boxShadow = `0 0 10px ${sparkle.style.background}, 0 0 20px ${sparkle.style.background}`;
+                
+                sparkleContainer.appendChild(sparkle);
+            }
+        }
+
         // --- Audio Context Setup (Web Audio API) ---
-        // We use synth to avoid external files and keep it lightweight/reliable
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -487,52 +516,51 @@
 
         // --- Sound Effects ---
         
-        // Hover Sound: A tiny, high-pitched "tick" or sparkle
+        // Hover Sound: A luxurious sparkle
         function playHoverSound() {
             if (!audioCtx) return;
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
             
             oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+            oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + 0.04);
             
-            gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            gainNode.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
             
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
             oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.05);
+            oscillator.stop(audioCtx.currentTime + 0.04);
         }
 
-        // Click Sound: A lush, major chord "bling"
+        // Click Sound: A gorgeous, rich "bling" chord
         function playClickSound() {
             if (!audioCtx) return;
             
-            const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C Major chord
+            const frequencies = [659.25, 830.61, 987.77, 1318.51]; // E Major chord - brighter, more luxe
             const now = audioCtx.currentTime;
 
             frequencies.forEach((freq, i) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 
-                osc.type = 'triangle'; // Softer than square, richer than sine
+                osc.type = 'triangle';
                 osc.frequency.setValueAtTime(freq, now);
                 
-                // Stagger starts slightly for arpeggio effect
-                const startTime = now + (i * 0.03);
+                const startTime = now + (i * 0.025);
                 
                 gain.gain.setValueAtTime(0, startTime);
-                gain.gain.linearRampToValueAtTime(0.05, startTime + 0.05);
-                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+                gain.gain.linearRampToValueAtTime(0.04, startTime + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.7);
                 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 
                 osc.start(startTime);
-                osc.stop(startTime + 0.6);
+                osc.stop(startTime + 0.7);
             });
         }
 
@@ -543,18 +571,52 @@
             el.className = 'pop-text';
             el.innerText = funnyPhrases[Math.floor(Math.random() * funnyPhrases.length)];
             
-            // Random slight rotation for fun
-            const rot = (Math.random() - 0.5) * 30;
+            const rot = (Math.random() - 0.5) * 40;
             el.style.left = x + 'px';
             el.style.top = y + 'px';
             el.style.transform = `rotate(${rot}deg)`;
             
             document.body.appendChild(el);
             
-            // Cleanup
+            // Create mini sparkle burst
+            createMiniSparkles(x, y);
+            
             setTimeout(() => {
                 el.remove();
-            }, 800);
+            }, 1000);
+        }
+
+        // Mini sparkle burst on click
+        function createMiniSparkles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const spark = document.createElement('div');
+                spark.style.position = 'fixed';
+                spark.style.left = x + 'px';
+                spark.style.top = y + 'px';
+                spark.style.width = '6px';
+                spark.style.height = '6px';
+                spark.style.borderRadius = '50%';
+                spark.style.background = '#ffd700';
+                spark.style.boxShadow = '0 0 10px #ffd700';
+                spark.style.pointerEvents = 'none';
+                spark.style.zIndex = '999';
+                
+                const angle = (i / 8) * Math.PI * 2;
+                const velocity = 50 + Math.random() * 50;
+                const dx = Math.cos(angle) * velocity;
+                const dy = Math.sin(angle) * velocity;
+                
+                spark.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${dx}px, ${dy}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 600,
+                    easing: 'cubic-bezier(0, 0, 0.2, 1)'
+                });
+                
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 600);
+            }
         }
 
         // --- Grid Generation ---
@@ -565,6 +627,15 @@
                 card.className = 'number-card';
                 card.textContent = i;
                 
+                // Staggered entrance animation
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px) scale(0.9)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0) scale(1)';
+                }, i * 15);
+                
                 // Hover interaction
                 card.addEventListener('mouseenter', () => {
                     playHoverSound();
@@ -572,15 +643,13 @@
 
                 // Click interaction
                 card.addEventListener('click', (e) => {
-                    // Toggle selection state
                     const isSelected = card.classList.toggle('selected');
                     
                     if (isSelected) {
-                        playClickSound();
+                        // Play the custom sound
+                        clickSound.currentTime = 0;
+                        clickSound.play();
                         
-                        // Get click position for the pop text
-                        // Use clientX/Y from event or get bounding rect center if needed
-                        // Using event coordinates is more playful
                         createPopText(e.clientX, e.clientY);
                     }
                 });
@@ -594,11 +663,13 @@
         startBtn.addEventListener('click', () => {
             initAudio();
             overlay.style.opacity = '0';
+            overlay.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 overlay.style.display = 'none';
-            }, 500);
+            }, 600);
         });
 
+        createSparkles();
         createGrid();
 
     </script>
