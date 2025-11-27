@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxe Number Grid ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #00f2fe;
+            --secondary-glow: #4facfe;
+            --accent-pink: #ff9a9e;
+            --accent-purple: #a18cd1;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-color: #fff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #a18cd1 0%, #fbc2eb 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 15px;
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+            perspective: 1000px;
+            margin-bottom: 40px;
+        }
+
+        .number-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05), inset 0 0 10px rgba(255,255,255,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        /* Glossy Shine Effect */
+        .number-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.3) 0%, transparent 40%, transparent 100%);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        .number-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.4);
+            border-color: #fff;
+            z-index: 10;
+        }
+
+        .number-card:active {
+            transform: scale(0.95);
+        }
+
+        /* Selected State */
+        .number-card.selected {
+            background: linear-gradient(135deg, var(--secondary-glow) 0%, var(--primary-glow) 100%);
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 0 20px var(--primary-glow), inset 0 0 15px rgba(255,255,255,0.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1.0); }
+        }
+
+        /* Floating Text Micro-interaction */
+        .pop-text {
+            position: fixed;
+            pointer-events: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(0) scale(0.5); }
+            20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-60px) scale(1); }
+        }
+
+        /* Start Overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            border: none;
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 154, 158, 0.4);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Audio Consent Overlay -->
+    <div id="overlay">
+        <button class="start-btn" id="startBtn">✨ Start the Magic ✨</button>
+    </div>
+
+    <h1>✨ 1 - 80 Luxe Grid ✨</h1>
+    
+    <div class="grid-container" id="grid"></div>
+
+    <script>
+        // --- Setup ---
+        const grid = document.getElementById('grid');
+        const overlay = document.getElementById('overlay');
+        const startBtn = document.getElementById('startBtn');
+        let audioCtx;
+        
+        const funnyPhrases = [
+            "Yaaas!", "Slay!", "Gorg!", "Chic!", "Boop!", 
+            "Spicy!", "Ooh la la!", "Divine!", "Iconic!", 
+            "Serving!", "Luxe!", "Glow up!", "Sheesh!", "Pop!"
+        ];
+
+        // --- Audio Context Setup (Web Audio API) ---
+        // We use synth to avoid external files and keep it lightweight/reliable
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // --- Sound Effects ---
+        
+        // Hover Sound: A tiny, high-pitched "tick" or sparkle
+        function playHoverSound() {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+            
+            gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // Click Sound: A lush, major chord "bling"
+        function playClickSound() {
+            if (!audioCtx) return;
+            
+            const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C Major chord
+            const now = audioCtx.currentTime;
+
+            frequencies.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'triangle'; // Softer than square, richer than sine
+                osc.frequency.setValueAtTime(freq, now);
+                
+                // Stagger starts slightly for arpeggio effect
+                const startTime = now + (i * 0.03);
+                
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.05, startTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(startTime);
+                osc.stop(startTime + 0.6);
+            });
+        }
+
+        // --- Visual Effects ---
+
+        function createPopText(x, y) {
+            const el = document.createElement('div');
+            el.className = 'pop-text';
+            el.innerText = funnyPhrases[Math.floor(Math.random() * funnyPhrases.length)];
+            
+            // Random slight rotation for fun
+            const rot = (Math.random() - 0.5) * 30;
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.transform = `rotate(${rot}deg)`;
+            
+            document.body.appendChild(el);
+            
+            // Cleanup
+            setTimeout(() => {
+                el.remove();
+            }, 800);
+        }
+
+        // --- Grid Generation ---
+        
+        function createGrid() {
+            for (let i = 1; i <= 80; i++) {
+                const card = document.createElement('div');
+                card.className = 'number-card';
+                card.textContent = i;
+                
+                // Hover interaction
+                card.addEventListener('mouseenter', () => {
+                    playHoverSound();
+                });
+
+                // Click interaction
+                card.addEventListener('click', (e) => {
+                    // Toggle selection state
+                    const isSelected = card.classList.toggle('selected');
+                    
+                    if (isSelected) {
+                        playClickSound();
+                        
+                        // Get click position for the pop text
+                        // Use clientX/Y from event or get bounding rect center if needed
+                        // Using event coordinates is more playful
+                        createPopText(e.clientX, e.clientY);
+                        
+                        // Add particle burst logic here if we wanted to get crazy, 
+                        // but the CSS glow is pretty luxe already.
+                    }
+                });
+
+                grid.appendChild(card);
+            }
+        }
+
+        // --- Init ---
+
+        startBtn.addEventListener('click', () => {
+            initAudio();
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        });
+
+        createGrid();
+
+    </script>
+</body>
+</html>
